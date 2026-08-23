@@ -41,7 +41,10 @@ giftsRef.on('value', (snapshot) => {
 function renderGift(id, name, isBooked, link) {
   const li = document.createElement('li');
   li.className = `gift-item ${isBooked ? 'booked' : ''}`;
+  
+  // Rende sicuri i testi per passarli alle funzioni senza rompere le virgolette
   const safeName = name.replace(/'/g, "\\'");
+  const currentLink = (link || "").replace(/'/g, "\\'");
   
   let linkHTML = '';
   if (link && link.trim() !== '') {
@@ -55,7 +58,10 @@ function renderGift(id, name, isBooked, link) {
       ${linkHTML}
     </div>
     <div class="gift-actions">
-      <button class="delete-btn" onclick="deleteGift('${id}', '${safeName}')">🗑️</button>
+      <!-- Tasto modifica Link -->
+      <button class="edit-btn" title="Modifica link" onclick="editLink('${id}', '${safeName}', '${currentLink}')">✏️</button>
+      <!-- Tasto Cestino -->
+      <button class="delete-btn" title="Elimina regalo" onclick="deleteGift('${id}', '${safeName}')">🗑️</button>
       <div class="checkbox-wrapper">
         <input type="checkbox" id="${id}" ${isBooked ? 'checked' : ''} onchange="toggleGift('${id}', '${safeName}', this.checked, this)">
         <span class="checkmark"></span>
@@ -111,6 +117,18 @@ addGiftBtn.addEventListener('click', () => {
   }
 });
 
+// Modificare un link esistente
+function editLink(id, name, currentLink) {
+  const newLink = prompt(`Inserisci il nuovo link per "${name}"\n(Lascia vuoto per rimuoverlo):`, currentLink);
+  
+  // Se l'utente clicca OK (e non "Annulla")
+  if (newLink !== null) {
+    db.ref('regali/' + id).update({
+      link: newLink.trim()
+    });
+  }
+}
+
 // Eliminare regalo
 function deleteGift(id, name) {
   if (confirm(`Sei sicuro di voler eliminare definitivamente "${name}"?`)) {
@@ -120,12 +138,11 @@ function deleteGift(id, name) {
 
 // IMPORTAZIONE VELOCE DA TESTO
 toggleImportBtn.addEventListener('click', () => {
-  // Mostra/Nasconde l'area testo
   importArea.style.display = importArea.style.display === 'none' ? 'flex' : 'none';
 });
 
 confirmImportBtn.addEventListener('click', () => {
-  const lines = importText.value.split('\n'); // Divide il testo in righe
+  const lines = importText.value.split('\n');
   let count = 0;
 
   lines.forEach(line => {
@@ -134,15 +151,11 @@ confirmImportBtn.addEventListener('click', () => {
       let nomeRegalo = text;
       let linkRegalo = '';
 
-      // Cerca se nella riga c'è un "http"
       const linkStart = text.indexOf('http');
       
       if (linkStart !== -1) {
-        // Separa il link dal nome
         linkRegalo = text.substring(linkStart).trim();
         nomeRegalo = text.substring(0, linkStart).trim();
-        
-        // Pulisce l'ultimo carattere del nome se è un trattino, virgola o punto
         nomeRegalo = nomeRegalo.replace(/[\,\-\.\:]+$/, '').trim();
       }
 
@@ -160,7 +173,7 @@ confirmImportBtn.addEventListener('click', () => {
   if (count > 0) {
     alert(`🎉 Fatto! Sono stati aggiunti ${count} nuovi regali in lista.`);
     importText.value = '';
-    importArea.style.display = 'none'; // Richiude l'area
+    importArea.style.display = 'none';
   } else {
     alert("Nessun testo trovato. Incolla la tua lista nello spazio apposito.");
   }
