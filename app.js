@@ -13,13 +13,12 @@ const db = firebase.database();
 const giftsRef = db.ref('regali');
 const listContainer = document.getElementById('gift-list');
 
-// Variabili per l'Admin
 const adminBtn = document.getElementById('admin-btn');
 const addGiftBtn = document.getElementById('add-gift-btn');
 const newGiftInput = document.getElementById('new-gift-input');
 let isAdmin = false;
 
-// Ascolto in tempo reale (ricarica la lista se aggiungi/rimuovi qualcosa)
+// Ascolto in tempo reale
 giftsRef.on('value', (snapshot) => {
   listContainer.innerHTML = '';
   const data = snapshot.val();
@@ -32,7 +31,7 @@ giftsRef.on('value', (snapshot) => {
   }
 });
 
-// Creazione grafica dei regali (ora include il cestino)
+// Creazione della lista
 function renderGift(id, name, isBooked) {
   const li = document.createElement('li');
   li.className = `gift-item ${isBooked ? 'booked' : ''}`;
@@ -43,9 +42,7 @@ function renderGift(id, name, isBooked) {
       <div class="gift-name">${name}</div>
     </div>
     <div class="gift-actions">
-      <!-- Cestino invisibile finché non inserisci la password -->
       <button class="delete-btn" onclick="deleteGift('${id}', '${safeName}')">🗑️</button>
-      
       <div class="checkbox-wrapper">
         <input type="checkbox" id="${id}" ${isBooked ? 'checked' : ''} onchange="toggleGift('${id}', '${safeName}', this.checked, this)">
         <span class="checkmark"></span>
@@ -55,42 +52,47 @@ function renderGift(id, name, isBooked) {
   listContainer.appendChild(li);
 }
 
-// Spunta del checkbox con alert
+// DOPPIA CONFERMA (Per prenotare e per disdire)
 function toggleGift(id, name, isBooked, checkboxElement) {
-  if (!isBooked) {
-    const conferma = window.confirm(`${name} risulta già spuntato: desideri reinserirlo in lista?`);
+  if (isBooked) {
+    // L'utente ha cliccato per PRENOTARE il regalo
+    const conferma = window.confirm(`Confermi di voler prenotare "${name}"?`);
+    if (conferma) {
+      db.ref('regali/' + id).update({ prenotato: true });
+    } else {
+      checkboxElement.checked = false; // Toglie la spunta se l'utente annulla
+    }
+  } else {
+    // L'utente ha cliccato per DISDIRE il regalo
+    const conferma = window.confirm(`"${name}" risulta già spuntato: desideri reinserirlo in lista?`);
     if (conferma) {
       db.ref('regali/' + id).update({ prenotato: false });
     } else {
-      checkboxElement.checked = true;
+      checkboxElement.checked = true; // Rimette la spunta se l'utente annulla
     }
-  } else {
-    db.ref('regali/' + id).update({ prenotato: true });
   }
 }
 
-// --- LOGICA MAMMA E PAPÀ ---
-
-// Clic sul tasto Modifica
+// LOGICA MAMMA E PAPÀ
 adminBtn.addEventListener('click', () => {
   if (!isAdmin) {
-    const psw = prompt("Inserisci la password per modificare la lista:");
+    // Il testo del popup specifica che l'area è riservata
+    const psw = prompt("Area riservata a mamma e papà.\nInserisci la password per modificare la lista:");
     if (psw === "151025") {
       isAdmin = true;
       document.body.classList.add('admin-mode');
-      adminBtn.innerHTML = "Chiudi Modifica";
+      adminBtn.innerHTML = "❌ Chiudi Modifica"; // Cambia il testo del bottone
     } else if (psw !== null) {
       alert("Password errata!");
     }
   } else {
-    // Esce dalla modalità modifica
     isAdmin = false;
     document.body.classList.remove('admin-mode');
-    adminBtn.innerHTML = `Modifica<br><span class="admin-sub">(solo per mamma e papà)</span>`;
+    adminBtn.innerHTML = "⚙️ Modifica"; // Riporta il bottone allo stato originale
   }
 });
 
-// Aggiungere un nuovo regalo
+// Aggiungere un regalo
 addGiftBtn.addEventListener('click', () => {
   const name = newGiftInput.value.trim();
   if (name) {
@@ -98,11 +100,11 @@ addGiftBtn.addEventListener('click', () => {
       nome: name,
       prenotato: false
     });
-    newGiftInput.value = ''; // Svuota la barra
+    newGiftInput.value = '';
   }
 });
 
-// Eliminare definitivamente un regalo
+// Eliminare un regalo
 function deleteGift(id, name) {
   if (confirm(`Sei sicuro di voler eliminare definitivamente "${name}"?`)) {
     db.ref('regali/' + id).remove();
