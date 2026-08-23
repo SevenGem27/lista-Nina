@@ -29,7 +29,6 @@ body {
   display: block;
 }
 
-/* Stili Pannello Admin (Nascosto di base) */
 .admin-panel {
   display: none; 
   background: rgba(255, 255, 255, 0.9);
@@ -40,7 +39,6 @@ body {
   gap: 10px;
 }
 
-/* Quando la password è giusta, il body prende la classe 'admin-mode' */
 body.admin-mode .admin-panel {
   display: flex;
 }
@@ -113,9 +111,8 @@ body.admin-mode .admin-panel {
   align-items: center;
 }
 
-/* Tasto Cestino */
 .delete-btn {
-  display: none; /* Nascosto per gli invitati */
+  display: none;
   background: none;
   border: none;
   color: #ff4d4d;
@@ -125,7 +122,6 @@ body.admin-mode .admin-panel {
   padding: 5px;
 }
 
-/* Mostra il cestino solo in modalità Admin */
 body.admin-mode .delete-btn {
   display: inline-block;
 }
@@ -181,15 +177,21 @@ body.admin-mode .delete-btn {
   display: block;
 }
 
+/* --- STILE UNIFICATO PER I DUE BOTTONI --- */
 .print-btn, .admin-btn {
   position: fixed;
   bottom: 20px;
+  height: 42px; /* Altezza fissa per renderli identici */
   background-color: rgba(255, 255, 255, 0.9);
   border: 2px solid #e28d9e;
-  border-radius: 20px;
-  padding: 10px 16px;
+  border-radius: 21px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: 'Quicksand', sans-serif;
   font-weight: 700;
+  font-size: 0.9rem;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
@@ -199,19 +201,15 @@ body.admin-mode .delete-btn {
 .print-btn {
   left: 20px;
   color: #e28d9e;
-  font-size: 0.9rem;
 }
 
 .admin-btn {
   right: 20px;
   color: #837275;
-  font-size: 0.85rem;
-  text-align: center;
 }
 
-.admin-sub {
-  font-size: 0.65rem;
-  font-weight: 500;
+.print-btn:active, .admin-btn:active {
+  transform: scale(0.95);
 }
 
 @media print {
