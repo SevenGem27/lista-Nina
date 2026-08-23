@@ -1,3 +1,11 @@
+// FORZA PULIZIA CACHE E VECCHI SERVICE WORKER DELLA PWA
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) {
+      registration.unregister();
+    }
+  });
+}
 const firebaseConfig = {
   apiKey: "AIzaSyC2zsBDV2dO8zqI1H6Brpy3ENpGRBApqc0",
   authDomain: "lista-nina.firebaseapp.com",
