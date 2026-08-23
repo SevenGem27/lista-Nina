@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lista Regali di Nina</title>
+  
+  <!-- Font elegante per la lista -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Firebase SDK Compat -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Spazio superiore dedicato alla grafica con la scritta già inclusa -->
+    <header class="top-spacer">
+      <p class="subtitle-hint">Spunta la casella per prenotare un regalo 🎀</p>
+    </header>
+
+    <ul id="gift-list" class="gift-list">
+      <div class="loading">Caricamento lista regali...</div>
+    </ul>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
