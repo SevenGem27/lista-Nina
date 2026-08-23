@@ -33,21 +33,41 @@ function renderGift(id, name, isBooked) {
   const li = document.createElement('li');
   li.className = `gift-item ${isBooked ? 'booked' : ''}`;
   
+  // Protegge il codice nel caso in cui un regalo abbia un apostrofo nel nome (es. "L'orsacchiotto")
+  const safeName = name.replace(/'/g, "\\'");
+
   li.innerHTML = `
     <div class="gift-info">
       <div class="gift-name">${name}</div>
     </div>
     <div class="checkbox-wrapper">
-      <input type="checkbox" id="${id}" ${isBooked ? 'checked' : ''} onchange="toggleGift('${id}', this.checked)">
+      <input type="checkbox" id="${id}" ${isBooked ? 'checked' : ''} onchange="toggleGift('${id}', '${safeName}', this.checked, this)">
       <span class="checkmark"></span>
     </div>
   `;
   listContainer.appendChild(li);
 }
 
-// Scrittura nel database
-function toggleGift(id, isBooked) {
-  db.ref('regali/' + id).update({
-    prenotato: isBooked
-  });
+// Scrittura nel database con alert di conferma per chi disdice
+function toggleGift(id, name, isBooked, checkboxElement) {
+  if (!isBooked) {
+    // L'utente sta cercando di togliere una spunta già messa
+    const conferma = window.confirm(`${name} risulta già spuntato: desideri reinserirlo in lista?`);
+    
+    if (conferma) {
+      // L'utente ha confermato -> aggiorniamo il database rimettendo il regalo "libero"
+      db.ref('regali/' + id).update({ prenotato: false });
+    } else {
+      // L'utente ha annullato -> ripristiniamo la spunta visivamente per rimediare all'errore
+      checkboxElement.checked = true;
+    }
+  } else {
+    // L'utente sta prenotando il regalo per la prima volta -> nessun alert, salva subito
+    db.ref('regali/' + id).update({ prenotato: true });
+  }
 }
+
+// Funzione bottone stampa
+document.getElementById('print-btn').addEventListener('click', () => {
+  window.print();
+});
