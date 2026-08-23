@@ -7,7 +7,7 @@
 html, body {
   width: 100%;
   min-height: 100%;
-  background-color: transparent; /* Rimosso il muro rosa! */
+  background-color: transparent;
 }
 
 body {
@@ -33,41 +33,47 @@ body {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px; /* Leggermente aumentato per dare respiro agli elementi senza box */
 }
 
+/* Riquadro trasparente: via sfondo, bordi e ombre! */
 .gift-item {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: 18px;
-  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  padding: 8px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 15px rgba(230, 180, 190, 0.2);
   transition: all 0.3s ease;
 }
 
+/* Testo leggermente più piccolo, ispessito e con un alone bianco di protezione */
 .gift-name {
   font-family: 'Great Vibes', cursive;
-  font-size: 1.85rem;
+  font-size: 1.65rem; /* Dimensione ridotta */
+  font-weight: bold;  /* Ispessimento del tratto */
   color: #000000;
   line-height: 1.2;
   letter-spacing: 0.5px;
   word-break: break-word;
+  /* Effetto alone per renderlo leggibile su ogni colore dello sfondo */
+  text-shadow: 
+    -1px -1px 2px rgba(255,255,255,0.9),
+     1px -1px 2px rgba(255,255,255,0.9),
+    -1px  1px 2px rgba(255,255,255,0.9),
+     1px  1px 2px rgba(255,255,255,0.9),
+     0px  0px 8px rgba(255,255,255,1);
 }
 
+/* Stile trasparente anche quando il regalo è prenotato */
 .gift-item.booked {
-  background: rgba(245, 245, 245, 0.65);
-  border-color: rgba(220, 220, 220, 0.5);
+  background: transparent;
   opacity: 0.55;
 }
 
 .gift-item.booked .gift-name {
   text-decoration: line-through;
-  color: #555555;
+  color: #333333;
 }
 
 .checkbox-wrapper {
@@ -93,7 +99,7 @@ body {
   left: 0;
   width: 28px;
   height: 28px;
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.85); /* Leggermente trasparente per integrarsi */
   border: 2px solid #e28d9e;
   border-radius: 8px;
   transition: all 0.25s ease;
