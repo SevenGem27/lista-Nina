@@ -6,8 +6,7 @@
 
 body {
   min-height: 100vh;
-  /* Richiama esattamente l'immagine che hai caricato su GitHub */
-  background-image: url("sfondo.png");
+  /* L'immagine ora è nell'HTML, qui gestiamo solo come si adatta */
   background-size: cover;
   background-position: top center;
   background-repeat: no-repeat;
@@ -25,8 +24,7 @@ body {
   flex-direction: column;
 }
 
-/* Questa altezza (42vh) spinge la lista verso il basso per non coprire il disegno. 
-   Se la lista è troppo alta o troppo bassa, puoi cambiare questo 42! */
+/* Altezza dello spazio superiore */
 .top-spacer {
   height: 42vh;
   display: block;
