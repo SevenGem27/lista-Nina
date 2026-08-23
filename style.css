@@ -165,18 +165,22 @@ body.admin-mode .admin-panel {
   align-items: center;
 }
 
-.delete-btn {
+/* Tastini Admin (Matita e Cestino) */
+.delete-btn, .edit-btn {
   display: none;
   background: none;
   border: none;
-  color: #ff4d4d;
   font-size: 1.3rem;
   cursor: pointer;
-  margin-right: 15px;
+  margin-right: 8px;
   padding: 5px;
 }
 
-body.admin-mode .delete-btn {
+.delete-btn { color: #ff4d4d; margin-right: 15px; }
+
+/* Li mostriamo solo in modalità Admin */
+body.admin-mode .delete-btn,
+body.admin-mode .edit-btn {
   display: inline-block;
 }
 
