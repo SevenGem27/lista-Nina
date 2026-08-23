@@ -8,14 +8,18 @@ const firebaseConfig = {
   appId: "1:988324882362:web:07099ba20165d8ca7e1f83"
 };
 
-// Inizializza Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const giftsRef = db.ref('regali');
-
 const listContainer = document.getElementById('gift-list');
 
-// Sincronizzazione lista in tempo reale
+// Variabili per l'Admin
+const adminBtn = document.getElementById('admin-btn');
+const addGiftBtn = document.getElementById('add-gift-btn');
+const newGiftInput = document.getElementById('new-gift-input');
+let isAdmin = false;
+
+// Ascolto in tempo reale (ricarica la lista se aggiungi/rimuovi qualcosa)
 giftsRef.on('value', (snapshot) => {
   listContainer.innerHTML = '';
   const data = snapshot.val();
@@ -28,46 +32,84 @@ giftsRef.on('value', (snapshot) => {
   }
 });
 
-// Creazione degli elementi nella lista
+// Creazione grafica dei regali (ora include il cestino)
 function renderGift(id, name, isBooked) {
   const li = document.createElement('li');
   li.className = `gift-item ${isBooked ? 'booked' : ''}`;
-  
-  // Protegge il codice nel caso in cui un regalo abbia un apostrofo nel nome (es. "L'orsacchiotto")
   const safeName = name.replace(/'/g, "\\'");
 
   li.innerHTML = `
     <div class="gift-info">
       <div class="gift-name">${name}</div>
     </div>
-    <div class="checkbox-wrapper">
-      <input type="checkbox" id="${id}" ${isBooked ? 'checked' : ''} onchange="toggleGift('${id}', '${safeName}', this.checked, this)">
-      <span class="checkmark"></span>
+    <div class="gift-actions">
+      <!-- Cestino invisibile finché non inserisci la password -->
+      <button class="delete-btn" onclick="deleteGift('${id}', '${safeName}')">🗑️</button>
+      
+      <div class="checkbox-wrapper">
+        <input type="checkbox" id="${id}" ${isBooked ? 'checked' : ''} onchange="toggleGift('${id}', '${safeName}', this.checked, this)">
+        <span class="checkmark"></span>
+      </div>
     </div>
   `;
   listContainer.appendChild(li);
 }
 
-// Scrittura nel database con alert di conferma per chi disdice
+// Spunta del checkbox con alert
 function toggleGift(id, name, isBooked, checkboxElement) {
   if (!isBooked) {
-    // L'utente sta cercando di togliere una spunta già messa
     const conferma = window.confirm(`${name} risulta già spuntato: desideri reinserirlo in lista?`);
-    
     if (conferma) {
-      // L'utente ha confermato -> aggiorniamo il database rimettendo il regalo "libero"
       db.ref('regali/' + id).update({ prenotato: false });
     } else {
-      // L'utente ha annullato -> ripristiniamo la spunta visivamente per rimediare all'errore
       checkboxElement.checked = true;
     }
   } else {
-    // L'utente sta prenotando il regalo per la prima volta -> nessun alert, salva subito
     db.ref('regali/' + id).update({ prenotato: true });
   }
 }
 
-// Funzione bottone stampa
+// --- LOGICA MAMMA E PAPÀ ---
+
+// Clic sul tasto Modifica
+adminBtn.addEventListener('click', () => {
+  if (!isAdmin) {
+    const psw = prompt("Inserisci la password per modificare la lista:");
+    if (psw === "151025") {
+      isAdmin = true;
+      document.body.classList.add('admin-mode');
+      adminBtn.innerHTML = "Chiudi Modifica";
+    } else if (psw !== null) {
+      alert("Password errata!");
+    }
+  } else {
+    // Esce dalla modalità modifica
+    isAdmin = false;
+    document.body.classList.remove('admin-mode');
+    adminBtn.innerHTML = `Modifica<br><span class="admin-sub">(solo per mamma e papà)</span>`;
+  }
+});
+
+// Aggiungere un nuovo regalo
+addGiftBtn.addEventListener('click', () => {
+  const name = newGiftInput.value.trim();
+  if (name) {
+    db.ref('regali').push({
+      nome: name,
+      prenotato: false
+    });
+    newGiftInput.value = ''; // Svuota la barra
+  }
+});
+
+// Eliminare definitivamente un regalo
+function deleteGift(id, name) {
+  if (confirm(`Sei sicuro di voler eliminare definitivamente "${name}"?`)) {
+    db.ref('regali/' + id).remove();
+  }
+}
+
+// Tasto Stampa
 document.getElementById('print-btn').addEventListener('click', () => {
   window.print();
 });
