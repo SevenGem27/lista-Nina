@@ -1,7 +1,7 @@
-// Configurazione Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC2zsBDV2dO8zqI1H6Brpy3ENpGRBApqc0",
   authDomain: "lista-nina.firebaseapp.com",
+  databaseURL: "https://lista-nina-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "lista-nina",
   storageBucket: "lista-nina.firebasestorage.app",
   messagingSenderId: "988324882362",
@@ -15,7 +15,7 @@ const giftsRef = db.ref('regali');
 
 const listContainer = document.getElementById('gift-list');
 
-// Ascolto real-time
+// Sincronizzazione lista in tempo reale
 giftsRef.on('value', (snapshot) => {
   listContainer.innerHTML = '';
   const data = snapshot.val();
@@ -25,11 +25,10 @@ giftsRef.on('value', (snapshot) => {
       const gift = data[key];
       renderGift(key, gift.nome, gift.prenotato);
     });
-  } else {
-    listContainer.innerHTML = '<div class="loading">Nessun regalo presente al momento!</div>';
   }
 });
 
+// Creazione degli elementi nella lista
 function renderGift(id, name, isBooked) {
   const li = document.createElement('li');
   li.className = `gift-item ${isBooked ? 'booked' : ''}`;
@@ -46,6 +45,7 @@ function renderGift(id, name, isBooked) {
   listContainer.appendChild(li);
 }
 
+// Scrittura nel database
 function toggleGift(id, isBooked) {
   db.ref('regali/' + id).update({
     prenotato: isBooked
