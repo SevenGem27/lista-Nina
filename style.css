@@ -31,11 +31,12 @@ body {
 
 .admin-panel {
   display: none; 
-  background: rgba(255, 255, 255, 0.9);
-  padding: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 16px;
   border-radius: 15px;
   margin-bottom: 16px;
-  box-shadow: 0 4px 15px rgba(230, 180, 190, 0.3);
+  box-shadow: 0 4px 15px rgba(230, 180, 190, 0.4);
+  flex-direction: column;
   gap: 10px;
 }
 
@@ -44,8 +45,8 @@ body.admin-mode .admin-panel {
 }
 
 .admin-panel input {
-  flex-grow: 1;
-  padding: 8px 12px;
+  width: 100%;
+  padding: 10px 12px;
   border: 1px solid #e28d9e;
   border-radius: 8px;
   font-family: 'Quicksand', sans-serif;
@@ -57,10 +58,11 @@ body.admin-mode .admin-panel {
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 8px 16px;
+  padding: 10px 16px;
   font-family: 'Quicksand', sans-serif;
   font-weight: bold;
   cursor: pointer;
+  margin-top: 4px;
 }
 
 .gift-list {
@@ -80,6 +82,14 @@ body.admin-mode .admin-panel {
   transition: all 0.3s ease;
 }
 
+/* Serve ad incolonnare nome del regalo e link */
+.gift-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-grow: 1;
+}
+
 .gift-name {
   font-family: 'Great Vibes', cursive;
   font-size: 1.65rem;
@@ -94,6 +104,23 @@ body.admin-mode .admin-panel {
     -1px  1px 2px rgba(255,255,255,0.9),
      1px  1px 2px rgba(255,255,255,0.9),
      0px  0px 8px rgba(255,255,255,1);
+}
+
+/* Stile del bottoncino per l'acquisto */
+.gift-link-btn {
+  display: inline-flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.85);
+  border: 1px solid #e28d9e;
+  color: #e28d9e;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 12px;
+  width: fit-content;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 .gift-item.booked {
@@ -177,12 +204,11 @@ body.admin-mode .delete-btn {
   display: block;
 }
 
-/* --- STILE UNIFICATO PER I DUE BOTTONI --- */
 .print-btn, .admin-btn {
   position: fixed;
   bottom: 20px;
-  height: 42px; /* Altezza fissa per renderli identici */
-  background-color: rgba(255, 255, 255, 0.9);
+  height: 42px;
+  background-color: rgba(255, 255, 255, 0.95);
   border: 2px solid #e28d9e;
   border-radius: 21px;
   padding: 0 16px;
@@ -198,22 +224,15 @@ body.admin-mode .delete-btn {
   z-index: 100;
 }
 
-.print-btn {
-  left: 20px;
-  color: #e28d9e;
-}
-
-.admin-btn {
-  right: 20px;
-  color: #837275;
-}
+.print-btn { left: 20px; color: #e28d9e; }
+.admin-btn { right: 20px; color: #837275; }
 
 .print-btn:active, .admin-btn:active {
   transform: scale(0.95);
 }
 
 @media print {
-  .print-btn, .admin-btn, .admin-panel { display: none !important; }
+  .print-btn, .admin-btn, .admin-panel, .gift-link-btn { display: none !important; }
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
