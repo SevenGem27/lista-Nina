@@ -4,13 +4,13 @@
   padding: 0;
 }
 
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background-color: #fcecf0; /* Rosa pastello al posto del bianco */
+}
+
 body {
-  min-height: 100vh;
-  /* L'immagine ora è nell'HTML, qui gestiamo solo come si adatta */
-  background-size: cover;
-  background-position: top center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
   display: flex;
   justify-content: center;
   font-family: 'Quicksand', sans-serif;
@@ -24,7 +24,6 @@ body {
   flex-direction: column;
 }
 
-/* Altezza dello spazio superiore */
 .top-spacer {
   height: 42vh;
   display: block;
