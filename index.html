@@ -36,13 +36,21 @@
 <body>
   <div class="app-container">
     <header class="top-spacer"></header>
+    
+    <!-- Pannello Modifica (Nascosto di default) -->
+    <div id="admin-panel" class="admin-panel">
+      <input type="text" id="new-gift-input" placeholder="Nome nuovo regalo...">
+      <button id="add-gift-btn">Aggiungi</button>
+    </div>
+
     <ul id="gift-list" class="gift-list"></ul>
   </div>
 
-  <!-- Bottone di stampa -->
-  <button id="print-btn" class="print-btn" aria-label="Salva o Stampa PDF">
-    🖨️ Stampa PDF
-  </button>
+  <!-- Bottone Stampa -->
+  <button id="print-btn" class="print-btn" aria-label="Salva o Stampa PDF">🖨️ Stampa PDF</button>
+
+  <!-- Bottone Modifica -->
+  <button id="admin-btn" class="admin-btn">Modifica<br><span class="admin-sub">(solo per mamma e papà)</span></button>
 
   <script src="app.js"></script>
 </body>
