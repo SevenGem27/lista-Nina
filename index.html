@@ -5,32 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Lista Regali di Nina</title>
   
-  <!-- Font elegante per la lista -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
   
-  <!-- Collegamento allo stile -->
   <link rel="stylesheet" href="style.css">
   
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
 <body>
   <div class="app-container">
-    <!-- Spazio vuoto trasparente per non coprire la scritta sulla tua immagine -->
-    <header class="top-spacer">
-      <p class="subtitle-hint">Spunta la casella per prenotare un regalo 🎀</p>
-    </header>
+    <!-- Spazio vuoto in alto per mostrare l'immagine e la scritta originale dello sfondo -->
+    <header class="top-spacer"></header>
 
-    <!-- Qui appariranno i regali -->
-    <ul id="gift-list" class="gift-list">
-      <div class="loading">Caricamento lista regali...</div>
-    </ul>
+    <!-- La lista dei regali apparirà direttamente qui -->
+    <ul id="gift-list" class="gift-list"></ul>
   </div>
 
-  <!-- Collegamento alla logica -->
   <script src="app.js"></script>
 </body>
 </html>
